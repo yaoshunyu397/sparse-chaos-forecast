@@ -1,0 +1,35 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# ---- 实验产物 ----
+# 检查点：每个约 2 MB，339 个共约 393 MB。由 train.py 重建。
+*.pt
+runs/
+runs_*/
+evals/
+evals_*/
+
+# reservoir 读出层（由 run_reservoir.py 重建）
+*.npz
+
+# 生成的轨迹数据（由 data/generate.py 在约 9 秒内重建）
+data/*.npy
+
+# 日志
+*.log
+
+# ---- 图像 ----
+# 只保留 README 引用的汇总图，排除逐组训练曲线（60+ 张）
+figs/*
+!figs/report_lorenz63.png
+!figs/report_lorenz96.png
+!figs/phase_diagram.png
+!figs/noise_curves.png
+!figs/heat_equation.png
+
+# ---- 本地工作笔记 ----
+# HANDOFF.md 含个人申请流程记录，不纳入公开仓库
+HANDOFF.md
