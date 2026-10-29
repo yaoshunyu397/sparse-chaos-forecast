@@ -1,0 +1,12 @@
+* text=auto eol=lf
+
+# Windows 批处理脚本保持 CRLF（本项目未使用，留作扩展）
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 二进制
+*.png binary
+*.jpg binary
+*.pt  binary
+*.npz binary
+*.npy binary
