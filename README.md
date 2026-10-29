@@ -1,5 +1,7 @@
 # Sparse Chaos Forecast
 
+**English** · **[中文简介](#中文简介)**
+
 How does the best model for forecasting a chaotic system depend on **how much of
 the state you can observe, and how noisy those observations are**?
 
@@ -8,11 +10,51 @@ compares four approaches — MLP, LSTM, transformer, and an echo-state-network
 (reservoir) baseline — under one protocol, together with the failures I found
 along the way.
 
-**研究问题**：当动力系统只能被部分观测时，Transformer 相对 LSTM 的预测优势，
-是否依赖于系统本身的动力学特性？
+Three findings, in the order I found them:
 
-本仓库复现并扩展 [Gupta et al., *Neural Networks* 160 (2023) 297–305](https://pubmed.ncbi.nlm.nih.gov/36716509/)
-中 "partially observable spatiotemporal chaotic systems" 的预测设定。
+1. **On clean observations the simplest model wins.** The MLP predicts about
+   twice as long as the transformer (VPT 99.9 vs 49.2 steps, 3 seeds), and four
+   times more training does not close the gap.
+2. **Noise changes the ranking — but not at a single crossover.** A single-seed
+   sweep suggested a crossover near σ ≈ 0.03; re-running with 3 seeds over 5
+   noise levels (120 new runs) showed the LSTM overtakes the MLP only in the
+   sparsest setting (17 % observed). Sparsity and noise interact.
+3. **The reservoir is the worst model on clean data and the most noise-robust.**
+   Under 5 % noise its one-step error degrades 24–35×, yet its rollout horizon
+   *improves* 62–76 %. A clean case of one-step accuracy decoupling from
+   closed-loop stability.
+
+The benchmark setup follows [Gupta et al., *Neural Networks* 160 (2023) 297–305](https://pubmed.ncbi.nlm.nih.gov/36716509/)
+("partially observable spatiotemporal chaotic systems").
+
+---
+
+## 中文简介
+
+**预测混沌系统时，哪个模型最好？本仓库的答案是：取决于你观测到多少状态、以及这些观测有多吵。**
+
+在 Lorenz-63 与 Lorenz-96 上，用同一套评估协议比较四种方法——MLP、LSTM、
+Transformer，以及 reservoir（回声状态网络 ESN）基线。所有实验可复现，
+开发过程中发现的每一处错误都记录在案。
+
+三条结论：无噪声下最简单的 MLP 最好（VPT 约为 Transformer 的两倍）；
+加噪声后排序改变，但不是单一交叉点——LSTM 只在观测最稀疏（17%）时稳定反超；
+reservoir 在干净数据上最差却最抗噪，噪声下其一步误差恶化 24–35 倍，
+闭环预测时长反而提升 62–76%。
+
+**如果只跑干净观测，你会得到"Transformer 不如 MLP"；把噪声-稀疏度平面扫完，
+你会得到"模型排名不是系统的固有属性，而是观测条件的属性"。后者才是这里真正要说的事。**
+
+本仓库正文（结果表、方法、失败记录）以中文撰写，下方各节为详述；
+如需英文全文版可另行提供。
+
+### 双语文件
+
+| 文件 | 语言 | 内容 |
+|---|---|---|
+| `README.md` | 英文导语 + 中文正文 | 本文件 |
+| `seed_results.md` / `noise_results.md` / `noise_sweep_seeds.md` / `reservoir_results.md` | 中文 | 自动生成的结果表 |
+| `RESERVOIR_GUIDE.md` / `RESULTS_GUIDE.md` | 中文 | 方法说明与解读指南 |
 
 ---
 
